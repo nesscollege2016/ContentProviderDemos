@@ -8,10 +8,7 @@
     tools:context="ness.tomerbu.edu.contentproviderdemos.ContactsActivity"
     tools:showIn="@layout/activity_contacts">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
-        android:text="@string/large_text" />
-
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" android:id="@+id/rvContacts"/>
 </android.support.v4.widget.NestedScrollView>

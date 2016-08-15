@@ -3,8 +3,10 @@ package ness.tomerbu.edu.contentproviderdemos;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -15,6 +17,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
+
+import java.util.ArrayList;
+
+import ness.tomerbu.edu.contentproviderdemos.models.Contact;
 
 
 public class ContactsActivity extends AppCompatActivity {
@@ -23,6 +30,7 @@ public class ContactsActivity extends AppCompatActivity {
     private static final int REQUEST_CONTACTS = 10;
     FloatingActionButton fab;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,6 +38,7 @@ public class ContactsActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         fab = (FloatingActionButton) findViewById(R.id.fab);
+
 
 
 
@@ -95,7 +104,31 @@ public class ContactsActivity extends AppCompatActivity {
 
     //Method that requires Permission
     private void readContacts(){
+        ArrayList<Contact> contacts = new ArrayList<>();
+        //get the Uri of the provider
+        //getContentResovler().query(uri)///SQLIte
 
+        Uri contentUri = ContactsContract.Contacts.CONTENT_URI;
+
+        Cursor cursor = getContentResolver().query(contentUri, null, null, null, null);
+
+        if (cursor.moveToFirst()){
+            do{
+                //Read the data from the cursor
+                String id = cursor.getString(
+                        cursor.getColumnIndex(ContactsContract.Contacts._ID));
+
+
+                String name = cursor.getString(
+                        cursor.getColumnIndex(
+                                ContactsContract.Contacts.DISPLAY_NAME));
+
+                Contact c = new Contact(id ,name);
+                contacts.add(c);
+
+            }while (cursor.moveToNext());
+        }
+        Toast.makeText(ContactsActivity.this, contacts.toString(), Toast.LENGTH_SHORT).show();
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
